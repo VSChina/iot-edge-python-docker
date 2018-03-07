@@ -1,0 +1,7 @@
+FROM druttka/edgepydeps:ubuntu-16.04-anaconda3-5.1.0
+
+WORKDIR /app
+COPY src/** /app/
+
+RUN pip install -r requirements.txt
+CMD ["python", "HelloEdge.py"]

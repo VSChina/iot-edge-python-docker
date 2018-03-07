@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python",
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": true,
+      "pythonPath": "${config:python.pythonPath}",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "env": {},
+      "envFile": "${workspaceFolder}/.env",
+      "debugOptions": [
+        "RedirectOutput"
+      ]
+    },
+    {
+      "name": "Debug IoT Edge Module PythonModule (.NET Core)",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickRemoteProcess}",
+      "pipeTransport": {
+        "pipeProgram": "docker",
+        "pipeArgs": [
+          "exec",
+          "-i",
+          "PythonModule",
+          "sh",
+          "-c"
+        ],
+        "debuggerPath": "~/vsdbg/vsdbg",
+        "pipeCwd": "${workspaceFolder}",
+        "quoteArgs": true
+      },
+      "sourceFileMap": {
+        "/app": "${workspaceFolder}/modules/PythonModule"
+      },
+      "justMyCode": true
+    }
+  ]
+}
