@@ -63,7 +63,7 @@ def init(connStr):
 
             # messages can be encoded as string or bytearray
             message = IoTHubMessage(msg_txt_formatted)
-            client.send_event_async("output1", message, send_confirmation_callback, None)
+            client.send_event_async("temperatureOutput", message, send_confirmation_callback, None)
 
             # Wait for Commands or exit
             print ( "IoTHubClient waiting for commands, press Ctrl-C to exit" )
