@@ -1,0 +1,9 @@
+FROM lbates2000/python-windows
+
+WORKDIR /app
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+
+COPY . .
+
+CMD ["python", "-u", "HelloEdge.py"]
