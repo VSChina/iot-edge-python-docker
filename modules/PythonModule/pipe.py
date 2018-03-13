@@ -4,42 +4,22 @@
 # Licensed under the MIT license. See LICENSE file in the project root for
 # full license information.
 
+import os
 import random
 import time
 import sys
 import iothub_client
 from iothub_client import IoTHubClient, IoTHubClientError, IoTHubTransportProvider
-from iothub_client import IoTHubMessage, IoTHubMessageDispositionResult, IoTHubError, DeviceMethodReturnValue
-from iothub_client_args import get_iothub_opt, OptionError
-
-# HTTP options
-# Because it can poll "after 9 seconds" polls will happen effectively
-# at ~10 seconds.
-# Note that for scalabilty, the default value of minimumPollingTime
-# is 25 minutes. For more information, see:
-# https://azure.microsoft.com/documentation/articles/iot-hub-devguide/#messaging
-TIMEOUT = 241000
-MINIMUM_POLLING_TIME = 9
+from iothub_client import IoTHubMessage, IoTHubMessageDispositionResult, IoTHubError
 
 # messageTimeout - the maximum time in milliseconds until a message times out.
 # The timeout period starts at IoTHubClient.send_event_async.
 # By default, messages do not expire.
 MESSAGE_TIMEOUT = 10000
 
-RECEIVE_CONTEXT = 0
-AVG_WIND_SPEED = 10.0
-MIN_TEMPERATURE = 20.0
-MIN_HUMIDITY = 60.0
-MESSAGE_COUNT = 5
-RECEIVED_COUNT = 0
-TWIN_CONTEXT = 0
-METHOD_CONTEXT = 0
-
 # global counters
 RECEIVE_CALLBACKS = 0
 SEND_CALLBACKS = 0
-TWIN_CALLBACKS = 0
-METHOD_CALLBACKS = 0
 
 # Choose HTTP, AMQP or MQTT as transport protocol.  Currently only MQTT is supported.
 PROTOCOL = IoTHubTransportProvider.MQTT
@@ -82,42 +62,46 @@ class HubManager(object):
 
     def __init__(
             self,
-            connection_string,
-            protocol=IoTHubTransportProvider.MQTT):
-        self.client_protocol = protocol
-        self.client = IoTHubClient(connection_string, protocol)
-        if protocol == IoTHubTransportProvider.HTTP:
-            self.client.set_option("timeout", TIMEOUT)
-            self.client.set_option("MinimumPollingTime", MINIMUM_POLLING_TIME)
+            connection_string):
+        self.client_protocol = IoTHubTransportProvider.MQTT
+        self.client = IoTHubClient(connection_string, IoTHubTransportProvider.MQTT)
 
         # set the time until a message times out
         self.client.set_option("messageTimeout", MESSAGE_TIMEOUT)
         # some embedded platforms need certificate information
-        # self.set_certificates()
+        self.set_certificates()
         
         # sets the callback when a message arrives on "input1" queue.  Messages sent to 
         # other inputs or to the default will be silently discarded.
         self.client.set_message_callback("input1", receive_message_callback, self)
 
     def set_certificates(self):
-        from iothub_client_cert import CERTIFICATES
-        try:
-            self.client.set_option("TrustedCerts", CERTIFICATES)
-            print ( "set_option TrustedCerts successful" )
-        except IoTHubClientError as iothub_client_error:
-            print ( "set_option TrustedCerts failed (%s)" % iothub_client_error )
+        isWindows = sys.platform.lower() in ['windows', 'win32']
+        if not isWindows:
+            CERT_FILE = os.environ['EdgeModuleCACertificateFile']        
+            print("Adding TrustedCerts from: {0}".format(CERT_FILE))
+            
+            # this brings in x509 privateKey and certificate
+            file = open(CERT_FILE)
+            try:
+                self.client.set_option("TrustedCerts", file.read())
+                print ( "set_option TrustedCerts successful" )
+            except IoTHubClientError as iothub_client_error:
+                print ( "set_option TrustedCerts failed (%s)" % iothub_client_error )
+
+            file.close()
 
     # Forwards the message received onto the next stage in the process.
     def forward_event_to_output(self, outputQueueName, event, send_context):
         self.client.send_event_async(
             outputQueueName, event, send_confirmation_callback, send_context)
 
-def main(connection_string, protocol):
+def main(connection_string):
     try:
         print ( "\nPython %s\n" % sys.version )
         print ( "IoT Hub Client for Python" )
 
-        hub_manager = HubManager(connection_string, protocol)
+        hub_manager = HubManager(connection_string)
 
         print ( "Starting the IoT Hub Python sample using protocol %s..." % hub_manager.client_protocol )
         print ( "The sample is now waiting for messages and will indefinitely.  Press Ctrl-C to exit. ")
@@ -131,22 +115,12 @@ def main(connection_string, protocol):
     except KeyboardInterrupt:
         print ( "IoTHubClient sample stopped" )
 
-
-def usage():
-    print ( "Usage: iothub_client_sample_module_filter.py -p <protocol> -c <connectionstring>" )
-    print ( "    protocol        : <amqp, http, mqtt>" )
-    print ( "    connectionstring: <HostName=<host_name>;DeviceId=<device_id>;SharedAccessKey=<device_key>>" )
-
 if __name__ == '__main__':
     try:
-        (CONNECTION_STRING, PROTOCOL) = get_iothub_opt(sys.argv[1:], CONNECTION_STRING)
-    except OptionError as option_error:
-        print ( option_error )
-        usage()
+        CONNECTION_STRING = os.environ['EdgeHubConnectionString']
+
+    except Exception as error:
+        print ( error )
         sys.exit(1)
 
-    if PROTOCOL != IoTHubTransportProvider.MQTT:
-        protocol("Only the MQTT protocol is currently supported")
-        sys.exit(1)
-
-    main(CONNECTION_STRING, PROTOCOL)
+    main(CONNECTION_STRING)
