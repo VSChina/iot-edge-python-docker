@@ -12,4 +12,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD [ "python", "-u", "./pipe.py" ]
+CMD [ "python", "-u", "./filter.py" ]
