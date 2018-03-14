@@ -65,7 +65,7 @@ def receive_message_callback(message, hubManager):
     hubManager.forward_event_to_output("output1", message, 0)
     return IoTHubMessageDispositionResult.ACCEPTED
 
-
+# device_twin_callback is invoked when twin's desired properties are updated.
 def device_twin_callback(update_state, payload, user_context):
     global TWIN_CALLBACKS
     global TEMPERATURE_THRESHOLD
@@ -86,12 +86,13 @@ class HubManager(object):
             connection_string):
         self.client_protocol = PROTOCOL
         self.client = IoTHubClient(connection_string, PROTOCOL)
-
+    
         # set the time until a message times out
         self.client.set_option("messageTimeout", MESSAGE_TIMEOUT)
         # some embedded platforms need certificate information
         self.set_certificates()
         
+        # sets the callback when a twin's desired properties are updated.
         self.client.set_device_twin_callback(device_twin_callback, self)
         # sets the callback when a message arrives on "input1" queue.  Messages sent to 
         # other inputs or to the default will be silently discarded.
