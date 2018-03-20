@@ -59,7 +59,7 @@ def receive_message_callback(message, hubManager):
     RECEIVE_CALLBACKS += 1
     print ( "    Total calls received: %d" % RECEIVE_CALLBACKS )
     data = json.loads(message_text)
-    if data.has_key("machine") and data["machine"].has_key("temperature") and data["machine"]["temperature"] > TEMPERATURE_THRESHOLD:
+    if "machine" in data and "temperature" in data["machine"] and data["machine"]["temperature"] > TEMPERATURE_THRESHOLD:
         map_properties.add("MessageType", "Alert")
         print("Machine temperature %s exceeds threshold %s" % (data["machine"]["temperature"], TEMPERATURE_THRESHOLD))
     hubManager.forward_event_to_output("output1", message, 0)
@@ -71,9 +71,9 @@ def device_twin_callback(update_state, payload, user_context):
     global TEMPERATURE_THRESHOLD
     print ( "\nTwin callback called with:\nupdateStatus = %s\npayload = %s\ncontext = %s" % (update_state, payload, user_context) )
     data = json.loads(payload)
-    if data.has_key("desired") and data["desired"].has_key("TemperatureThreshold"):
+    if "desired" in data and "TemperatureThreshold" in data["desired"]:
         TEMPERATURE_THRESHOLD = data["desired"]["TemperatureThreshold"]
-    if data.has_key("TemperatureThreshold"):
+    if "TemperatureThreshold" in data:
         TEMPERATURE_THRESHOLD = data["TemperatureThreshold"]
     TWIN_CALLBACKS += 1
     print ( "Total calls confirmed: %d\n" % TWIN_CALLBACKS )
