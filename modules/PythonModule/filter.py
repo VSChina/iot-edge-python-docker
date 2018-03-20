@@ -2,6 +2,8 @@
 # Licensed under the MIT license. See LICENSE file in the project root for
 # full license information.
 
+import ptvsd
+ptvsd.enable_attach("my_secret", address=('0.0.0.0', 3000))
 import json
 import os
 import random

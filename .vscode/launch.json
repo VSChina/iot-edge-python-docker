@@ -2,6 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach Python Module (Remote Debug)",
+      "type": "python",
+      "request": "attach",
+      "localRoot": "${workspaceFolder}/modules/PythonModule",
+      "remoteRoot": "/app",
+      "port": 3000,
+      "secret": "my_secret",
+      "host": "localhost"
+    },
+    {
       "name": "Python",
       "type": "python",
       "request": "launch",
