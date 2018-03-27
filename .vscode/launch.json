@@ -12,7 +12,7 @@
       "host": "localhost"
     },
     {
-      "name": "Python",
+      "name": "Python (Launch)",
       "type": "python",
       "request": "launch",
       "stopOnEntry": true,
@@ -24,29 +24,6 @@
       "debugOptions": [
         "RedirectOutput"
       ]
-    },
-    {
-      "name": "Debug IoT Edge Module PythonModule (.NET Core)",
-      "type": "coreclr",
-      "request": "attach",
-      "processId": "${command:pickRemoteProcess}",
-      "pipeTransport": {
-        "pipeProgram": "docker",
-        "pipeArgs": [
-          "exec",
-          "-i",
-          "PythonModule",
-          "sh",
-          "-c"
-        ],
-        "debuggerPath": "~/vsdbg/vsdbg",
-        "pipeCwd": "${workspaceFolder}",
-        "quoteArgs": true
-      },
-      "sourceFileMap": {
-        "/app": "${workspaceFolder}/modules/PythonModule"
-      },
-      "justMyCode": true
     }
   ]
 }

@@ -130,7 +130,8 @@ def main(connection_string):
         print ( "The sample is now waiting for messages and will indefinitely.  Press Ctrl-C to exit. ")
 
         while True:
-            time.sleep(1000)
+            print (1)
+            time.sleep(2)
 
     except IoTHubError as iothub_error:
         print ( "Unexpected error %s from IoTHub" % iothub_error )
