@@ -2,13 +2,17 @@
     "$schema-version": "0.0.1",
     "description": "",
     "image": {
-        "repository": "localhost:5000/pythonmodule",
+        "repository": "formulahendry/pythonmodule",
         "tag": {
             "version": "0.0.3",
             "platforms": {
-                "amd64": "./Dockerfile", 
+                "amd64": "./Dockerfile",
+                "amd64.improve": "./Dockerfile.improve",
+                "amd64.jessie": "./Dockerfile.jessie", 
                 "amd64.debug": "./Dockerfile.amd64.debug",
-                "windows-amd64": "./Dockerfile.windows-amd64"
+                "windows-amd64": "./Dockerfile.1.windows-amd64",
+                "windows-amd64-servercore": "./Dockerfile.windows-amd64",
+                "windows-amd64-py-servercore": "./Dockerfile.windows-amd64-py-servercore"
             }
         }
     },

@@ -1,9 +1,11 @@
+# Windows Nano Server container running python 3.6.0 and pip 9.0.1
 FROM lbates2000/python-windows
-
 WORKDIR /app
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
-
 COPY . .
 
-CMD ["python", "-u", "HelloEdge.py"]
+ADD https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963AEAD48/vc_redist.x64.exe C:/vc_redist.x64.exe
+RUN C:\vc_redist.x64.exe /quiet /install
+
+CMD ["C:\\Python\\python.exe", "-u", "filter.py"]

@@ -1,4 +1,4 @@
-FROM yorek/anaconda3-windowservercore:latest
+FROM python:3-windowsservercore
 
 WORKDIR /app
 COPY requirements.txt ./

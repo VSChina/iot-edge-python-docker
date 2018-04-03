@@ -2,3 +2,4 @@ config/
 .env
 bin/
 obj/
+.vs/
