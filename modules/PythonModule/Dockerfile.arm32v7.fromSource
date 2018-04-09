@@ -1,0 +1,18 @@
+FROM debian:jessie
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git cmake build-essential curl libcurl4-openssl-dev libssl-dev uuid-dev python-pip && \
+    rm -rf /var/lib/apt/lists/* 
+RUN git clone -b modules-preview --recursive https://github.com/Azure/azure-iot-sdk-python.git 
+
+WORKDIR /app/azure-iot-sdk-python/build_all/linux
+RUN ./setup.sh
+RUN ./build.sh
+
+RUN ls /app/azure-iot-sdk-pythondevice/samples
+
+COPY . .
+
+CMD [ "bash" ]
