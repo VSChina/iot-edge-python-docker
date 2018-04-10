@@ -45,7 +45,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.PythonModule.amd64.debug}",
+              "image": "${MODULES.PythonModule.windows-amd64-servercore}",
               "createOptions": "{\r\n                \"ExposedPorts\": {\r\n                  \"3000\/tcp\": {}\r\n                },\r\n                \"HostConfig\": {\r\n                  \"PortBindings\": {\r\n                    \"3000\/tcp\": [\r\n                      {\r\n                        \"HostPort\": \"3000\"\r\n                      }\r\n                    ]\r\n                  }\r\n                }\r\n              }"
             }
           }

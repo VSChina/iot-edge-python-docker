@@ -24,20 +24,18 @@ def iothub_client_init(connStr):
     # set the time until a message times out
     client.set_option("messageTimeout", MESSAGE_TIMEOUT)
     
-    isWindows = sys.platform.lower() in ['windows', 'win32']
-    if not isWindows:
-        CERT_FILE = os.environ['EdgeModuleCACertificateFile']        
-        print("Adding TrustedCerts from: {0}".format(CERT_FILE))
-        
-        # this brings in x509 privateKey and certificate
-        file = open(CERT_FILE)
-        try:
-            client.set_option("TrustedCerts", file.read())
-            print("Added cert")
-        except IoTHubClientError as iothub_client_error:
-            print('Setting IoT Edge TrustedCerts failed (%s)' % iothub_client_error)
-        
-        file.close()
+    CERT_FILE = os.environ['EdgeModuleCACertificateFile']        
+    print("Adding TrustedCerts from: {0}".format(CERT_FILE))
+    
+    # this brings in x509 privateKey and certificate
+    file = open(CERT_FILE)
+    try:
+        client.set_option("TrustedCerts", file.read())
+        print("Added cert")
+    except IoTHubClientError as iothub_client_error:
+        print('Setting IoT Edge TrustedCerts failed (%s)' % iothub_client_error)
+    
+    file.close()
 
     return client
 

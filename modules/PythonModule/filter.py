@@ -97,20 +97,18 @@ class HubManager(object):
         self.client.set_message_callback("input1", receive_message_callback, self)
 
     def set_certificates(self):
-        isWindows = sys.platform.lower() in ['windows', 'win32']
-        if not isWindows:
-            CERT_FILE = os.environ['EdgeModuleCACertificateFile']        
-            print("Adding TrustedCerts from: {0}".format(CERT_FILE))
-            
-            # this brings in x509 privateKey and certificate
-            file = open(CERT_FILE)
-            try:
-                self.client.set_option("TrustedCerts", file.read())
-                print ( "set_option TrustedCerts successful" )
-            except IoTHubClientError as iothub_client_error:
-                print ( "set_option TrustedCerts failed (%s)" % iothub_client_error )
+        CERT_FILE = os.environ['EdgeModuleCACertificateFile']        
+        print("Adding TrustedCerts from: {0}".format(CERT_FILE))
+        
+        # this brings in x509 privateKey and certificate
+        file = open(CERT_FILE)
+        try:
+            self.client.set_option("TrustedCerts", file.read())
+            print ( "set_option TrustedCerts successful" )
+        except IoTHubClientError as iothub_client_error:
+            print ( "set_option TrustedCerts failed (%s)" % iothub_client_error )
 
-            file.close()
+        file.close()
 
     # Forwards the message received onto the next stage in the process.
     def forward_event_to_output(self, outputQueueName, event, send_context):
@@ -128,7 +126,6 @@ def main(connection_string):
         print ( "The sample is now waiting for messages and will indefinitely.  Press Ctrl-C to exit. ")
 
         while True:
-            print (1)
             time.sleep(2)
 
     except IoTHubError as iothub_error:
