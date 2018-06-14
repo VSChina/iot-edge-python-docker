@@ -80,8 +80,6 @@ class HubManager(object):
         self.client_protocol = protocol
         self.client = IoTHubModuleClient()
         self.client.create_from_environment(protocol)
-		
-        self.client.set_option("logtrace", 1)
     
         # set the time until a message times out
         self.client.set_option("messageTimeout", MESSAGE_TIMEOUT)
