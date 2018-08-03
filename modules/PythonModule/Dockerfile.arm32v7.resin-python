@@ -1,0 +1,16 @@
+FROM resin/raspberrypi3-python:2.7
+#This image is base on the resin image which is based on armv7 debian jessie, which has libboost-python1.55.0.
+
+#update list of packages available
+RUN apt-get update
+
+#Needed by iothub_client
+RUN apt-get install -y \
+        libboost-python1.55.0
+
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+
+COPY . .
+
+ENTRYPOINT [ "python", "-u", "./main.py" ]
