@@ -10,6 +10,12 @@ import iothub_client
 from iothub_client import IoTHubModuleClient, IoTHubClientError, IoTHubTransportProvider
 from iothub_client import IoTHubMessage, IoTHubMessageDispositionResult, IoTHubError
 
+import ptvsd
+
+ptvsd.enable_attach(('0.0.0.0', 3000))
+ptvsd.wait_for_attach()
+ptvsd.break_into_debugger()
+
 # messageTimeout - the maximum time in milliseconds until a message times out.
 # The timeout period starts at IoTHubModuleClient.send_event_async.
 # By default, messages do not expire.
@@ -40,6 +46,7 @@ def send_confirmation_callback(message, result, user_context):
 # input queue (in the case of this sample, "input1").  Because this is a filter module, 
 # we will forward this message onto the "output1" queue.
 def receive_message_callback(message, hubManager):
+    # ptvsd.break_into_debugger()
     global RECEIVE_CALLBACKS
     global TEMPERATURE_THRESHOLD
     message_buffer = message.get_bytearray()
