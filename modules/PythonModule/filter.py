@@ -14,7 +14,7 @@ import ptvsd
 
 ptvsd.enable_attach(('0.0.0.0', 3000))
 ptvsd.wait_for_attach()
-ptvsd.break_into_debugger()
+
 
 # messageTimeout - the maximum time in milliseconds until a message times out.
 # The timeout period starts at IoTHubModuleClient.send_event_async.
@@ -22,7 +22,7 @@ ptvsd.break_into_debugger()
 MESSAGE_TIMEOUT = 10000
 
 # global counters
-RECEIVE_CALLBACKS = 0
+RECEIVE_CALLBACKS = 0           
 TWIN_CALLBACKS = 0
 SEND_CALLBACKS = 0
 
@@ -46,7 +46,7 @@ def send_confirmation_callback(message, result, user_context):
 # input queue (in the case of this sample, "input1").  Because this is a filter module, 
 # we will forward this message onto the "output1" queue.
 def receive_message_callback(message, hubManager):
-    # ptvsd.break_into_debugger()
+    ptvsd.break_into_debugger()
     global RECEIVE_CALLBACKS
     global TEMPERATURE_THRESHOLD
     message_buffer = message.get_bytearray()
@@ -67,6 +67,7 @@ def receive_message_callback(message, hubManager):
 
 # module_twin_callback is invoked when twin's desired properties are updated.
 def module_twin_callback(update_state, payload, user_context):
+    ptvsd.break_into_debugger()
     global TWIN_CALLBACKS
     global TEMPERATURE_THRESHOLD
     print ( "\nTwin callback called with:\nupdateStatus = %s\npayload = %s\ncontext = %s" % (update_state, payload, user_context) )
@@ -104,6 +105,7 @@ class HubManager(object):
 
 def main(protocol):
     try:
+        ptvsd.break_into_debugger()
         print ( "\nPython %s\n" % sys.version )
         print ( "IoT Hub Client for Python" )
 
