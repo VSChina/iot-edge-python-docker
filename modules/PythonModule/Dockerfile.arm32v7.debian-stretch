@@ -1,9 +1,9 @@
-FROM resin/raspberrypi3-python:2.7
+FROM resin/raspberrypi3-debian:stretch
 
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends libboost-python1.55.0 && \
+    apt-get install -y --no-install-recommends python-pip libboost-python1.62.0 && \
     rm -rf /var/lib/apt/lists/* 
 
 COPY requirements.txt ./
@@ -14,4 +14,4 @@ COPY . .
 RUN useradd -ms /bin/bash moduleuser
 USER moduleuser
 
-ENTRYPOINT [ "python", "-u", "./filter.py" ]
+CMD [ "python", "-u", "./main.py" ]

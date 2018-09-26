@@ -4,13 +4,14 @@
     "image": {
         "repository": "formulahendry/pythonmodule",
         "tag": {
-            "version": "0.0.3",
+            "version": "0.0.15",
             "platforms": {
                 "amd64": "./Dockerfile",
-                "amd64.improve": "./Dockerfile.improve",
-                "amd64.jessie": "./Dockerfile.jessie", 
+                "amd64.py3": "./Dockerfile.py3",
                 "amd64.debug": "./Dockerfile.amd64.debug",
                 "arm32v7": "./Dockerfile.arm32v7",
+                "arm32v7.debug": "./Dockerfile.arm32v7.debug",
+                "arm32v7.stretch": "./Dockerfile.arm32v7.stretch",
                 "windows-amd64": "./Dockerfile.1.windows-amd64",
                 "windows-amd64-servercore": "./Dockerfile.windows-amd64",
                 "windows-amd64-py-servercore": "./Dockerfile.windows-amd64-py-servercore"

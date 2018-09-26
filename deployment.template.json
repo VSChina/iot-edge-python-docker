@@ -22,6 +22,11 @@
             "type": "docker",
             "status": "running",
             "restartPolicy": "always",
+            "env": {
+              "OptimizeForPerformance": {
+                  "value": "false"
+              }
+            },
             "settings": {
               "image": "mcr.microsoft.com/azureiotedge-hub:1.0",
               "createOptions": "{\"HostConfig\":{\"PortBindings\":{\"8883/tcp\":[{\"HostPort\":\"8883\"}],\"443/tcp\":[{\"HostPort\":\"443\"}]}}}"
@@ -45,7 +50,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.PythonModule.amd64.debug}",
+              "image": "${MODULES.PythonModule.arm32v7}",
               "createOptions": "{\r\n                \"ExposedPorts\": {\r\n                  \"3000\/tcp\": {}\r\n                },\r\n                \"HostConfig\": {\r\n                  \"PortBindings\": {\r\n                    \"3000\/tcp\": [\r\n                      {\r\n                        \"HostPort\": \"3000\"\r\n                      }\r\n                    ]\r\n                  }\r\n                }\r\n              }"
             }
           }

@@ -6,12 +6,12 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends libboost-python1.55.0 && \
     rm -rf /var/lib/apt/lists/* 
 
-COPY requirements.txt ./
-RUN pip install -r requirements.txt
+COPY requirements-debug.txt ./
+RUN pip install -r requirements-debug.txt
 
 COPY . .
 
 RUN useradd -ms /bin/bash moduleuser
 USER moduleuser
 
-ENTRYPOINT [ "python", "-u", "./filter.py" ]
+ENTRYPOINT [ "python", "-u", "./filter.debug.py" ]

@@ -1,5 +1,7 @@
 FROM resin/raspberrypi3-python:2.7
 
+RUN [ "cross-build-start" ]
+
 WORKDIR /app
 
 RUN apt-get update && \
@@ -10,6 +12,8 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY . .
+
+RUN [ "cross-build-end" ]
 
 RUN useradd -ms /bin/bash moduleuser
 USER moduleuser
